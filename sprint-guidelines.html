@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprint Process Handbook — ASD 2026-27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #f7f2ea;
+    --surface:   #ffffff;
+    --ink:       #211d17;
+    --ink-soft:  #4a443c;
+    --muted:     #8c8579;
+    --border:    #e6ddd0;
+    --terracotta:      #c1592e;
+    --terracotta-dark: #a84a24;
+    --sage:      #4f7a5c;
+    --gold:      #c1912e;
+    --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --font-mono:  'JetBrains Mono', Consolas, 'SF Mono', monospace;
+    --font-sans:  -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-serif); }
+  a { color: inherit; }
+
+  .site-header {
+    display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    max-width: 840px; margin: 0 auto; padding: 34px 24px 20px;
+  }
+  .brand-row { display: flex; align-items: center; gap: 14px; }
+  .logo {
+    width: 40px; height: 40px; border-radius: 9px; background: var(--terracotta); color: #fff;
+    font-family: var(--font-mono); font-weight: 700; font-size: 16px;
+    display: flex; align-items: center; justify-content: center; flex: none;
+  }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--terracotta); margin-bottom: 3px; font-weight: 600;
+  }
+  .site-title-sm { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 600; color: var(--ink); }
+  .site-nav { display: flex; gap: 24px; align-items: center; padding-top: 10px; flex-wrap: wrap; }
+  .site-nav a {
+    font-family: var(--font-sans); font-size: 14px; color: var(--muted); text-decoration: none;
+    padding-bottom: 6px; border-bottom: 2px solid transparent;
+  }
+  .site-nav a:hover { color: var(--ink); }
+  .site-nav a.current { color: var(--ink); font-weight: 600; border-bottom-color: var(--terracotta); }
+  .header-rule { border: none; border-top: 1px solid var(--border); max-width: 840px; margin: 0 auto 8px; }
+
+  .wrap { max-width: 840px; margin: 0 auto; padding: 28px 24px 90px; line-height: 1.65; }
+  h1 { font-family: var(--font-serif); font-size: 1.9rem; font-weight: 600; margin: 0 0 6px; }
+  .sub { color: var(--muted); font-family: var(--font-mono); font-size: 12.5px; margin: 0 0 8px; }
+  .lede { color: var(--ink-soft); font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.75; margin: 20px 0 36px; }
+
+  h2 { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin: 44px 0 16px; padding-top: 12px; border-top: 1px solid var(--border); }
+  h2:first-of-type { border-top: none; padding-top: 0; }
+  h3 { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600; margin: 26px 0 10px; }
+  p, li { font-family: var(--font-serif); font-size: 0.98rem; color: var(--ink); }
+  p { margin: 0 0 14px; }
+  ul, ol { padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+
+  .quote { font-family: var(--font-mono); border-left: 3px solid var(--border); padding: 2px 0 2px 16px; color: var(--ink-soft); margin: 0 0 14px; font-size: 0.85rem; }
+  .quote.weak::before { content: "Weak: "; font-weight: 700; color: var(--muted); }
+  .quote.strong::before { content: "Strong: "; font-weight: 700; color: var(--sage); }
+
+  table { width: 100%; border-collapse: collapse; margin: 0 0 24px; font-family: var(--font-sans); font-size: 0.9rem; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-family: var(--font-mono); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  code { font-family: var(--font-mono); background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-size: 0.85em; color: var(--terracotta-dark); }
+  .cheat { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--terracotta); border-radius: 10px; padding: 18px 22px; font-family: var(--font-mono); font-size: 0.85rem; }
+  .cheat .row { display: flex; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .cheat .row:last-child { border-bottom: none; }
+  .cheat .trigger { flex: 0 0 175px; color: var(--muted); font-weight: 600; }
+  .cheat .action { flex: 1; color: var(--ink-soft); }
+
+  .callout {
+    background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--sage);
+    border-radius: 8px; padding: 14px 18px; margin: 0 0 20px; font-family: var(--font-mono); font-size: 0.85rem; color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand-row">
+      <div class="logo">{}</div>
+      <div>
+        <div class="eyebrow">Thacher School · Class of 2027</div>
+        <div class="site-title-sm">Applied Software Development</div>
+      </div>
+    </div>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="calendar.html">Calendar</a>
+      <a href="sprint-guidelines.html" class="current">Sprint Guidelines</a>
+      <a href="ops-project.html">Ops Project</a>
+    </nav>
+  </header>
+  <hr class="header-rule">
+
+  <div class="wrap">
+    <h1>Sprint Process Handbook</h1>
+    <p class="sub">How we plan, track, and document project work in this class.</p>
+    <p class="lede">This document is the standard for how we plan, track, and document project work in this class. It is not a one-time assignment — it's a living process you'll use every sprint, all year. Read it now, then come back to it whenever you're unsure what's expected. We use GitHub Issues, Milestones, and Projects to run this process. If you haven't used these before, that's expected — this handbook and the in-class exercises that go with it will get you there.</p>
+
+    <h2>Why We Do This</h2>
+    <p>In most classes, you turn in a document and you're done. That's not how real engineering work happens, and it's not how we're going to work here.</p>
+    <p>The goal is for your planning to stay alive throughout the sprint — you write down what you intend to build, you track it as you go, you update it when you learn something new, and at the end you can point to a clear trail of decisions, tasks, and outcomes. That trail is also how you'll be graded, so keeping it current isn't extra work — it is the work.</p>
+
+    <h2>Vocabulary — Quick Reference</h2>
+    <table>
+      <tr><th>Term</th><th>What it means</th></tr>
+      <tr><td><b>Milestone</b></td><td>Your Sprint Goal. One milestone = one sprint. Has a due date and shows % of tasks completed.</td></tr>
+      <tr><td><b>Issue</b></td><td>One task. Small enough to finish in under a day. Belongs to exactly one milestone.</td></tr>
+      <tr><td><b>Label</b></td><td>A tag on an issue (feature, bug, docs, blocked, stretch). Helps you and your team filter and see status at a glance.</td></tr>
+      <tr><td><b>Project Board</b></td><td>The live view of all your issues, organized as a kanban board (Todo / In Progress / Done).</td></tr>
+      <tr><td><b>ADR</b><br>(Architecture Decision Record)</td><td>A short markdown file documenting one significant decision — what you chose, what you considered, why. Lives in <code>/docs/decisions/</code>.</td></tr>
+    </table>
+
+    <h2>The Sprint Cycle</h2>
+    <p>Each sprint follows the same four phases. The rubric grades all four.</p>
+
+    <h3>1. Planning (start of sprint)</h3>
+    <p><b>Write your Sprint Goal as a Milestone.</b> This is graded under Goal Setting. A weak goal is a list of tasks ("work on the login page"). A strong goal is specific, measurable, and achievable in the sprint — and it should be inspiring enough that every task in the sprint clearly serves it.</p>
+    <p class="quote weak">"Work on the project."</p>
+    <p class="quote strong">"Users can create an account and log in with a hashed password by Friday."</p>
+    <p><b>Break the goal into Issues.</b> This is graded under Task Decomposition &amp; Planning. Every issue needs:</p>
+    <ul>
+      <li>A clear, specific title (not "backend stuff")</li>
+      <li>A description of what "done" looks like</li>
+      <li>An assignee</li>
+      <li>A size you could actually finish in under a day — if it's bigger, break it down further</li>
+      <li>A label</li>
+    </ul>
+    <p>If you can't tell who owns a task or what finishing it looks like, it's not ready to be an issue yet — go back and break it down more.</p>
+    <p><b>Talk about risk before you start building.</b> This is graded under Estimation &amp; Risk Awareness. Before the sprint starts, your team should be having conversations — in issue comments, in your planning doc, wherever — about what might go wrong. What's untested? What are you assuming? What could take longer than expected? Write it down. A team that never mentions risk isn't more prepared — they've just not thought about it yet.</p>
+    <p><b>Make sure your plan attacks the riskiest thing first.</b> This is graded under Strategic Focus &amp; Prioritization. If there's a part of the sprint that could fail or take much longer than expected, that's usually the thing to tackle first — not last. A plan that saves the scariest unknown for the final day isn't a real risk mitigation plan.</p>
+
+    <h3>2. Building (during the sprint)</h3>
+    <ul>
+      <li>Commit messages must reference the issue they relate to: <code>git commit -m "Add password hashing, closes #14"</code></li>
+      <li>When you finish a task, close the issue. Don't leave finished work sitting open.</li>
+      <li>When you discover new work mid-sprint, open a new issue immediately — don't just remember it in your head.</li>
+      <li>When you're blocked, say so in the issue's comments. Silence looks the same as "not working on it."</li>
+    </ul>
+
+    <h3>3. Documentation (throughout, checked at end of sprint)</h3>
+    <p>This is graded under Documentation of Work. "The code is on GitHub" is not documentation. By the end of the sprint:</p>
+    <ul>
+      <li>Your README reflects what actually exists, not what you planned to build</li>
+      <li>Closed issues link to the actual commits or code that resolved them</li>
+      <li>Any significant decision (why you chose one data structure over another, why you changed your architecture mid-sprint) has a short ADR in <code>/docs/decisions/</code></li>
+      <li>Someone outside your team could read your docs and understand what you built and why</li>
+    </ul>
+
+    <h3>4. Demo &amp; Retro (end of sprint)</h3>
+    <p>This is graded under Presentation of Progress and Retrospective Insight.</p>
+    <p><b>Demo:</b> Show working features, not a narrated tour of your code. Be honest about what didn't work — a polished demo that hides failure is worse than an honest one that explains what you learned. Tie the demo back to your Sprint Goal explicitly.</p>
+    <p><b>Retro:</b> Write a short reflection using this structure:</p>
+    <ul>
+      <li><b>Observation</b> — something you noticed about how your team worked (not just "it was hard")</li>
+      <li><b>Root cause</b> — why did that happen?</li>
+      <li><b>Experiment</b> — one specific, concrete thing you'll try differently next sprint</li>
+    </ul>
+    <p>A vague retro ("communication could be better") doesn't help you. A good one names a mechanism and proposes a real change ("we'll add a 5-minute standup at the start of each work block because we kept duplicating work").</p>
+
+    <h2>Rubric Mapping — What I'm Actually Looking At</h2>
+    <table>
+      <tr><th>Rubric category</th><th>Where I look</th></tr>
+      <tr><td>Goal Setting</td><td>Your Milestone title and description</td></tr>
+      <tr><td>Task Decomposition &amp; Planning</td><td>Your Issues — size, clarity, assignment</td></tr>
+      <tr><td>Estimation &amp; Risk Awareness</td><td>Comments and planning docs before work starts</td></tr>
+      <tr><td>Strategic Focus &amp; Prioritization</td><td>Order of work relative to identified risk</td></tr>
+      <tr><td>Documentation of Work</td><td>README, closed issue links, ADRs</td></tr>
+      <tr><td>Presentation of Progress</td><td>Your demo</td></tr>
+      <tr><td>Retrospective Insight</td><td>Your written retro</td></tr>
+    </table>
+    <p class="callout">If it isn't in GitHub, I can't grade it. Verbal explanations of what you meant to write down don't count — write it down.</p>
+
+    <h2>Common Mistakes (Read This Before You Start)</h2>
+    <ul>
+      <li><b>Giant issues.</b> "Build the backend" is not an issue, it's a milestone. If you can't finish it in a day, break it down.</li>
+      <li><b>Orphan issues.</b> Every issue belongs to a milestone. If you're not sure which one, that's a sign your milestone isn't well-defined yet.</li>
+      <li><b>Silent closing.</b> Closing an issue with no linked commit or comment tells me nothing about what you actually did.</li>
+      <li><b>Retro theater.</b> "We worked well together" is not a retro. Name something specific.</li>
+      <li><b>Backloading risk.</b> If the riskiest part of your build is scheduled for the last day, that's a planning problem, not a scheduling coincidence.</li>
+    </ul>
+
+    <h2>Quick Cheat Sheet</h2>
+    <div class="cheat">
+      <div class="row"><div class="trigger">New sprint</div><div class="action">Create a Milestone with a specific, measurable goal</div></div>
+      <div class="row"><div class="trigger">Break down work</div><div class="action">Create Issues, each under a day, each assigned</div></div>
+      <div class="row"><div class="trigger">Before building</div><div class="action">Comment on risks and assumptions</div></div>
+      <div class="row"><div class="trigger">While building</div><div class="action">Commit with "closes #N" when you finish a task</div></div>
+      <div class="row"><div class="trigger">Discover new work</div><div class="action">Open a new issue immediately</div></div>
+      <div class="row"><div class="trigger">Blocked?</div><div class="action">Comment on the issue, don't go silent</div></div>
+      <div class="row"><div class="trigger">End of sprint</div><div class="action">Update README, write ADRs for big decisions, close loose issues</div></div>
+      <div class="row"><div class="trigger">Demo</div><div class="action">Show what works, be honest about what doesn't</div></div>
+      <div class="row"><div class="trigger">Retro</div><div class="action">Observation → Root cause → Experiment</div></div>
+    </div>
+  </div>
+</body>
+</html>

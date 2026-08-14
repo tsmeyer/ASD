@@ -4,96 +4,178 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Applied Software Development — 2026-27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
 <style>
-  .viz-root {
-    color-scheme: light;
-    --surface-1:      #fcfcfb;
-    --surface-page:    #f9f9f7;
-    --text-primary:   #0b0b0b;
-    --text-secondary: #52514e;
-    --text-muted:     #898781;
-    --gridline:       #e1e0d9;
-    --border:         rgba(11,11,11,0.10);
-
-    --phase-1: #2a78d6;
-    --phase-2: #eb6834;
-    --phase-3: #1baf7a;
-    --phase-4: #eda100;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:where(:not([data-theme="light"])) .viz-root {
-      color-scheme: dark;
-      --surface-1:      #1a1a19;
-      --surface-page:    #0d0d0d;
-      --text-primary:   #ffffff;
-      --text-secondary: #c3c2b7;
-      --text-muted:     #898781;
-      --gridline:       #2c2c2a;
-      --border:         rgba(255,255,255,0.10);
-      --phase-1: #3987e5; --phase-2: #d95926; --phase-3: #199e70; --phase-4: #c98500;
-    }
-  }
-  :root[data-theme="dark"] .viz-root {
-    color-scheme: dark;
-    --surface-1: #1a1a19; --surface-page: #0d0d0d; --text-primary: #ffffff;
-    --text-secondary: #c3c2b7; --text-muted: #898781; --gridline: #2c2c2a; --border: rgba(255,255,255,0.10);
-    --phase-1: #3987e5; --phase-2: #d95926; --phase-3: #199e70; --phase-4: #c98500;
+  :root {
+    --bg:        #f7f2ea;
+    --surface:   #ffffff;
+    --ink:       #211d17;
+    --ink-soft:  #4a443c;
+    --muted:     #8c8579;
+    --border:    #e6ddd0;
+    --terracotta:      #c1592e;
+    --terracotta-dark: #a84a24;
+    --sage:      #4f7a5c;
+    --gold:      #c1912e;
+    --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --font-mono:  'JetBrains Mono', Consolas, 'SF Mono', monospace;
+    --font-sans:  -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-  .viz-root { background: var(--surface-page); color: var(--text-primary); min-height: 100vh; }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 80px; }
-  h1 { font-size: 2rem; margin: 0 0 8px; }
-  .sub { color: var(--text-secondary); font-size: 1.05rem; margin: 0 0 40px; line-height: 1.5; }
-  .cards { display: grid; gap: 16px; }
-  a.card {
-    display: block; padding: 20px 22px; border-radius: 12px;
-    border: 1px solid var(--border); background: var(--surface-1);
-    text-decoration: none; color: var(--text-primary); transition: border-color .15s ease;
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-serif); }
+  a { color: inherit; }
+
+  .site-header {
+    display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    max-width: 1080px; margin: 0 auto; padding: 34px 32px 20px;
   }
-  a.card:hover { border-color: var(--phase-1); }
-  a.card .title { font-weight: 600; font-size: 1.05rem; margin-bottom: 4px; }
-  a.card .desc { color: var(--text-secondary); font-size: 0.92rem; }
-  .card.disabled { opacity: 0.45; pointer-events: none; }
-  .note { margin-top: 48px; font-size: 0.85rem; color: var(--text-muted); border-top: 1px solid var(--gridline); padding-top: 20px; }
-  .theme-toggle {
-    position: fixed; top: 20px; right: 24px; font-size: 0.8rem; padding: 6px 12px;
-    border-radius: 8px; border: 1px solid var(--border); background: var(--surface-1);
-    color: var(--text-primary); cursor: pointer;
+  .brand-row { display: flex; align-items: center; gap: 14px; }
+  .logo {
+    width: 44px; height: 44px; border-radius: 10px; background: var(--terracotta); color: #fff;
+    font-family: var(--font-mono); font-weight: 700; font-size: 18px;
+    display: flex; align-items: center; justify-content: center; flex: none;
+  }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--terracotta); margin-bottom: 3px; font-weight: 600;
+  }
+  .site-title { font-family: var(--font-serif); font-size: 1.85rem; font-weight: 600; color: var(--ink); }
+  .site-nav { display: flex; gap: 26px; align-items: center; padding-top: 14px; flex-wrap: wrap; }
+  .site-nav a {
+    font-family: var(--font-sans); font-size: 14px; color: var(--muted); text-decoration: none;
+    padding-bottom: 6px; border-bottom: 2px solid transparent;
+  }
+  .site-nav a:hover { color: var(--ink); }
+  .site-nav a.current { color: var(--ink); font-weight: 600; border-bottom-color: var(--terracotta); }
+  .header-rule { border: none; border-top: 1px solid var(--border); max-width: 1080px; margin: 0 auto 36px; }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px 90px; }
+
+  .hero { display: grid; grid-template-columns: 1fr 300px; gap: 56px; margin-bottom: 56px; }
+  @media (max-width: 760px) { .hero { grid-template-columns: 1fr; gap: 32px; } }
+
+  .lead { font-family: var(--font-serif); font-size: 1.28rem; line-height: 1.55; margin: 0 0 20px; color: var(--ink); }
+  .lead-mono { font-family: var(--font-mono); font-size: 0.86rem; line-height: 1.75; color: var(--ink-soft); margin: 0 0 28px; }
+
+  .cta {
+    display: inline-flex; align-items: center; gap: 8px; background: var(--terracotta); color: #fff;
+    font-family: var(--font-sans); font-weight: 700; font-size: 14px; text-decoration: none;
+    padding: 12px 20px; border-radius: 9px; transition: background .15s ease;
+  }
+  .cta:hover { background: var(--terracotta-dark); }
+
+  .hero-side { display: flex; flex-direction: column; gap: 26px; }
+  .side-block { border-left: 3px solid var(--sage); padding-left: 16px; }
+  .side-block.muted { border-left-color: var(--border); }
+  .side-label {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 8px; font-weight: 600;
+  }
+  .side-mono { font-family: var(--font-mono); font-size: 0.86rem; line-height: 1.75; color: var(--ink); font-weight: 500; }
+  .side-block.muted .side-mono { color: var(--ink-soft); font-weight: 400; }
+
+  .section-row { display: flex; align-items: baseline; justify-content: space-between; margin: 0 0 22px; border-top: 1px solid var(--border); padding-top: 40px; }
+  .section-row h2 { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 600; margin: 0; }
+  .section-row .all-link { font-family: var(--font-sans); font-size: 13.5px; font-weight: 600; color: var(--sage); text-decoration: none; }
+  .section-row .all-link:hover { color: var(--terracotta); }
+
+  .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  @media (max-width: 760px) { .card-grid { grid-template-columns: 1fr; } }
+
+  a.unit-card, .unit-card {
+    display: block; background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--terracotta);
+    border-radius: 10px; padding: 18px 20px; text-decoration: none; color: var(--ink);
+    transition: border-color .15s ease, transform .1s ease;
+  }
+  a.unit-card:hover { border-left-color: var(--terracotta-dark); transform: translateY(-1px); }
+  .unit-card.disabled { opacity: 0.55; pointer-events: none; border-left-color: var(--muted); }
+  .card-label {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--terracotta); margin-bottom: 8px; font-weight: 600;
+  }
+  .card-title { font-family: var(--font-serif); font-size: 1.12rem; font-weight: 600; margin-bottom: 8px; }
+  .card-meta { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+
+  .note {
+    margin-top: 56px; font-family: var(--font-sans); font-size: 13px; color: var(--muted);
+    border-top: 1px solid var(--border); padding-top: 20px;
   }
 </style>
 </head>
 <body>
-<div class="viz-root">
-  <button class="theme-toggle" onclick="toggleTheme()">Toggle dark mode</button>
-  <div class="wrap">
-    <h1>Applied Software Development</h1>
-    <p class="sub">Thacher School — Class of 2027 senior project course. This site is a work in progress, built alongside the course itself.</p>
-
-    <div class="cards">
-      <a class="card" href="calendar.html">
-        <div class="title">Course Calendar →</div>
-        <div class="desc">The year at a glance: four phases, board meeting dates, and code-review cadence.</div>
-      </a>
-      <div class="card disabled">
-        <div class="title">Sprint Process Handbook (coming soon)</div>
-        <div class="desc">How we plan, track, and document project work using GitHub Issues, Milestones, and Projects.</div>
+  <header class="site-header">
+    <div class="brand-row">
+      <div class="logo">{}</div>
+      <div>
+        <div class="eyebrow">Thacher School · Class of 2027</div>
+        <div class="site-title">Applied Software Development</div>
       </div>
-      <div class="card disabled">
-        <div class="title">Repo Template &amp; AI-Assisted Coding Guide (coming soon)</div>
-        <div class="desc">The starter structure for team repos — CLAUDE.md, PRD, personas, decisions.</div>
+    </div>
+    <nav class="site-nav">
+      <a href="index.html" class="current">Home</a>
+      <a href="calendar.html">Calendar</a>
+      <a href="sprint-guidelines.html">Sprint Guidelines</a>
+      <a href="ops-project.html">Ops Project</a>
+    </nav>
+  </header>
+  <hr class="header-rule">
+
+  <div class="wrap">
+    <div class="hero">
+      <div class="hero-main">
+        <p class="lead">This course is a year-long senior project: students build a real product of their own choosing, run the way real software teams work.</p>
+        <p class="lead-mono">The year opens with a live infrastructure project before anyone pitches an idea — three teams stand up and own the chat, tracking, and monitoring tools the whole class depends on. From there it moves through ideation, research, and two-week build sprints with real code review, ending in a production launch and Demo Day. AI is part of how this class works, not a shortcut around it: think first, spec what you want, and understand what it writes.</p>
+        <a class="cta" href="calendar.html">View the Calendar →</a>
+      </div>
+      <aside class="hero-side">
+        <div class="side-block">
+          <div class="side-label">Office Hours</div>
+          <div class="side-mono">
+            A-week: Thursday 2–3 pm<br>
+            B-week: Thursday 12–1 pm<br>
+            Sunday 8–10 pm, Lower School
+          </div>
+        </div>
+        <div class="side-block muted">
+          <div class="side-label">Getting Help</div>
+          <div class="side-mono">
+            Rocket.Chat for the class (link posted here once it's live).<br>
+            Push your code before you ask — I can only help with what I can see.<br>
+            Extension requests in person, as early as possible.
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="section-row">
+      <h2>Course pages</h2>
+    </div>
+    <div class="card-grid">
+      <a class="unit-card" href="calendar.html">
+        <div class="card-label">Calendar</div>
+        <div class="card-title">Course Calendar</div>
+        <div class="card-meta">Ops Kickoff → 4 phases → Demo Day</div>
+      </a>
+      <a class="unit-card" href="sprint-guidelines.html">
+        <div class="card-label">Process</div>
+        <div class="card-title">Sprint Process Handbook</div>
+        <div class="card-meta">GitHub Issues, Milestones &amp; grading</div>
+      </a>
+      <a class="unit-card" href="ops-project.html">
+        <div class="card-label">Project</div>
+        <div class="card-title">Ops Infrastructure Project</div>
+        <div class="card-meta">Wk 1–2 · Rocket.Chat, Plane, Uptime Kuma</div>
+      </a>
+      <div class="unit-card disabled">
+        <div class="card-label">Coming soon</div>
+        <div class="card-title">Repo Template &amp; AI Coding Guide</div>
+        <div class="card-meta">CLAUDE.md, PRD, personas, decisions</div>
       </div>
     </div>
 
-    <p class="note">Draft site — first page live is the course calendar. More pages get added as the year's materials come together.</p>
+    <p class="note">This site is embedded in MyThacher as the course homepage and is a work in progress, built alongside the course itself.</p>
   </div>
-</div>
-<script>
-  function toggleTheme() {
-    const root = document.documentElement;
-    const current = root.getAttribute('data-theme');
-    root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
-  }
-</script>
 </body>
 </html>

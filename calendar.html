@@ -4,155 +4,144 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ASD 2026-27 Course Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
 <style>
-  .viz-root {
-    color-scheme: light;
-    --surface-1:      #fcfcfb;
-    --surface-page:    #f9f9f7;
-    --text-primary:   #0b0b0b;
-    --text-secondary: #52514e;
-    --text-muted:     #898781;
-    --gridline:       #e1e0d9;
-    --border:         rgba(11,11,11,0.10);
+  :root {
+    --bg:        #f7f2ea;
+    --surface:   #ffffff;
+    --ink:       #211d17;
+    --ink-soft:  #4a443c;
+    --muted:     #8c8579;
+    --border:    #e6ddd0;
+    --terracotta:      #c1592e;
+    --terracotta-dark: #a84a24;
+    --sage:      #4f7a5c;
+    --gold:      #c1912e;
 
-    --phase-1: #2a78d6; /* Ideation */
-    --phase-2: #eb6834; /* Research & Define */
-    --phase-3: #1baf7a; /* Build */
-    --phase-4: #eda100; /* Production & Delivery */
+    --phase-ops: #7a5c9e; /* Ops Infrastructure Kickoff */
+    --phase-1:   #5b7c99; /* Ideation */
+    --phase-2:   #c1592e; /* Research & Define */
+    --phase-3:   #4f7a5c; /* Build */
+    --phase-4:   #c1912e; /* Production & Delivery */
 
-    --status-good: #0ca30c;
-    --status-warn: #fab219;
+    --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --font-mono:  'JetBrains Mono', Consolas, 'SF Mono', monospace;
+    --font-sans:  -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:where(:not([data-theme="light"])) .viz-root {
-      color-scheme: dark;
-      --surface-1:      #1a1a19;
-      --surface-page:    #0d0d0d;
-      --text-primary:   #ffffff;
-      --text-secondary: #c3c2b7;
-      --text-muted:     #898781;
-      --gridline:       #2c2c2a;
-      --border:         rgba(255,255,255,0.10);
-
-      --phase-1: #3987e5;
-      --phase-2: #d95926;
-      --phase-3: #199e70;
-      --phase-4: #c98500;
-    }
-  }
-  :root[data-theme="dark"] .viz-root {
-    color-scheme: dark;
-    --surface-1:      #1a1a19;
-    --surface-page:    #0d0d0d;
-    --text-primary:   #ffffff;
-    --text-secondary: #c3c2b7;
-    --text-muted:     #898781;
-    --gridline:       #2c2c2a;
-    --border:         rgba(255,255,255,0.10);
-
-    --phase-1: #3987e5;
-    --phase-2: #d95926;
-    --phase-3: #199e70;
-    --phase-4: #c98500;
-  }
-
   * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    background: var(--surface-page);
-    color: var(--text-primary);
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-serif); }
+  a { color: inherit; }
+
+  .site-header {
+    display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    max-width: 1180px; margin: 0 auto; padding: 34px 32px 20px;
   }
-  .viz-root { padding: 28px 32px 48px; max-width: 1180px; margin: 0 auto; }
-
-  header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 6px; }
-  h1 { font-size: 22px; margin: 0 0 4px; }
-  .subtitle { color: var(--text-secondary); font-size: 14px; margin: 0 0 18px; max-width: 720px; line-height: 1.5; }
-
-  .theme-toggle {
-    border: 1px solid var(--border);
-    background: var(--surface-1);
-    color: var(--text-secondary);
-    border-radius: 6px;
-    padding: 6px 10px;
-    font-size: 12px;
-    cursor: pointer;
+  .brand-row { display: flex; align-items: center; gap: 14px; }
+  .logo {
+    width: 40px; height: 40px; border-radius: 9px; background: var(--terracotta); color: #fff;
+    font-family: var(--font-mono); font-weight: 700; font-size: 16px;
+    display: flex; align-items: center; justify-content: center; flex: none;
   }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--terracotta); margin-bottom: 3px; font-weight: 600;
+  }
+  .site-title-sm { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 600; color: var(--ink); }
+  .site-nav { display: flex; gap: 24px; align-items: center; padding-top: 10px; flex-wrap: wrap; }
+  .site-nav a {
+    font-family: var(--font-sans); font-size: 14px; color: var(--muted); text-decoration: none;
+    padding-bottom: 6px; border-bottom: 2px solid transparent;
+  }
+  .site-nav a:hover { color: var(--ink); }
+  .site-nav a.current { color: var(--ink); font-weight: 600; border-bottom-color: var(--terracotta); }
+  .header-rule { border: none; border-top: 1px solid var(--border); max-width: 1180px; margin: 0 auto 30px; }
 
-  .legend { display: flex; flex-wrap: wrap; gap: 18px; margin: 4px 0 26px; font-size: 12.5px; color: var(--text-secondary); }
+  .viz-root { padding: 4px 32px 60px; max-width: 1180px; margin: 0 auto; }
+
+  h1 { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 600; margin: 0 0 8px; }
+  .subtitle { color: var(--ink-soft); font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; margin: 0 0 22px; max-width: 760px; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 18px; margin: 4px 0 20px; font-family: var(--font-sans); font-size: 12.5px; color: var(--ink-soft); }
   .legend-item { display: flex; align-items: center; gap: 6px; }
-  .swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
-  .marker-key { display: flex; gap: 18px; margin-top: 4px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-secondary); }
+  .swatch { width: 11px; height: 11px; border-radius: 3px; flex: none; }
+  .marker-key { display: flex; gap: 18px; margin-top: 2px; margin-bottom: 26px; flex-wrap: wrap; font-family: var(--font-sans); font-size: 12.5px; color: var(--ink-soft); }
   .marker-key span.ic { margin-right: 4px; }
 
   .term-block { margin-bottom: 30px; }
-  .term-title { font-size: 15px; font-weight: 600; margin: 0 0 8px; display: flex; align-items: baseline; gap: 8px; }
-  .term-title .term-note { font-size: 12px; font-weight: 400; color: var(--text-muted); }
+  .term-title { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600; margin: 0 0 10px; display: flex; align-items: baseline; gap: 8px; }
+  .term-title .term-note { font-family: var(--font-mono); font-size: 11.5px; font-weight: 400; color: var(--muted); }
 
-  .weekrow { display: flex; gap: 3px; }
+  .weekrow { display: flex; gap: 4px; flex-wrap: wrap; }
   .week {
     position: relative;
     flex: 1 1 0;
-    min-width: 0;
-    border-radius: 5px;
-    padding: 7px 6px 8px;
+    min-width: 78px;
+    border-radius: 8px;
+    padding: 8px 7px 9px;
     color: #fff;
-    font-size: 10.8px;
-    line-height: 1.25;
-    min-height: 74px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    line-height: 1.3;
+    min-height: 82px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    border: 2px solid var(--surface-page); /* 2px surface gap between adjacent fills */
   }
-  .week .wk-num { font-size: 9.5px; opacity: 0.85; font-weight: 600; letter-spacing: 0.02em; }
-  .week .wk-label { margin-top: 3px; font-weight: 600; }
+  .week .wk-num { font-family: var(--font-mono); font-size: 10.5px; opacity: 0.85; font-weight: 700; letter-spacing: 0.02em; }
+  .week .wk-label { margin-top: 4px; font-weight: 700; }
   .week .wk-sub { margin-top: 2px; opacity: 0.92; font-weight: 400; }
   .week[data-phase="1"] { background: var(--phase-1); color: #ffffff; }
   .week[data-phase="2"] { background: var(--phase-2); color: #ffffff; }
   .week[data-phase="3"] { background: var(--phase-3); color: #ffffff; }
-  .week[data-phase="4"] { background: var(--phase-4); color: #241a00; } /* yellow needs dark ink for contrast */
+  .week[data-phase="4"] { background: var(--phase-4); color: #2c2004; }
+  .week[data-phase="ops"] { background: var(--phase-ops); color: #ffffff; }
+  .week.week-wide { flex-grow: 2; min-width: 160px; }
 
-  .badges { position: absolute; top: -9px; right: 3px; display: flex; gap: 3px; }
+  .badges { position: absolute; top: -9px; right: 4px; display: flex; gap: 3px; }
   .badge {
-    width: 17px; height: 17px; border-radius: 50%;
+    width: 19px; height: 19px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 10px; font-weight: 700;
-    border: 2px solid var(--surface-page);
+    font-family: var(--font-mono); font-size: 10.5px; font-weight: 700;
+    border: 2px solid var(--bg);
     cursor: default;
   }
-  .badge.board { background: var(--text-primary); color: var(--surface-1); }
-  .badge.review { background: var(--status-good); color: #fff; }
+  .badge.board { background: var(--ink); color: #fff; }
+  .badge.review { background: var(--sage); color: #fff; }
 
   table.calendar-table {
     width: 100%;
     border-collapse: collapse;
+    font-family: var(--font-sans);
     font-size: 12.5px;
     margin-top: 6px;
   }
   table.calendar-table caption {
-    text-align: left; font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;
+    text-align: left; font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-bottom: 10px;
   }
   table.calendar-table th, table.calendar-table td {
     text-align: left;
-    padding: 7px 10px;
-    border-bottom: 1px solid var(--gridline);
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
     vertical-align: top;
   }
   table.calendar-table th {
-    color: var(--text-muted);
+    color: var(--muted);
+    font-family: var(--font-mono);
     font-weight: 600;
-    font-size: 11.5px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.05em;
   }
-  table.calendar-table td.phase-cell { white-space: nowrap; font-weight: 600; }
+  table.calendar-table td.phase-cell { white-space: nowrap; font-weight: 700; }
   .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; }
 
   details { margin-top: 34px; }
-  summary { cursor: pointer; font-size: 13px; color: var(--text-secondary); font-weight: 600; padding: 6px 0; }
+  summary { cursor: pointer; font-family: var(--font-sans); font-size: 13px; color: var(--ink-soft); font-weight: 600; padding: 6px 0; }
 
-  .footnote { font-size: 12px; color: var(--text-muted); margin-top: 22px; line-height: 1.6; }
+  .footnote { font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); margin-top: 20px; line-height: 1.8; }
+  .footnote b { color: var(--ink-soft); }
 
   @media (max-width: 720px) {
     .weekrow { flex-wrap: wrap; }
@@ -161,48 +150,62 @@
 </style>
 </head>
 <body>
-<div class="viz-root" data-theme="">
-
-  <header>
-    <div>
-      <h1>Applied Software Development — 2026–27 Course Calendar</h1>
-      <p class="subtitle">
-        Board session dates are now real, pulled from the 2026-27 block schedule (G block). Day-to-day
-        week labels are still relative placeholders — see the footnote below before treating any non-board
-        week as a fixed date. Four phases, five board sessions plus Demo Day, and a code-review cadence
-        running roughly every 4 weeks (two sprints) once building starts.
-      </p>
+  <header class="site-header">
+    <div class="brand-row">
+      <div class="logo">{}</div>
+      <div>
+        <div class="eyebrow">Thacher School · Class of 2027</div>
+        <div class="site-title-sm">Applied Software Development</div>
+      </div>
     </div>
-    <button class="theme-toggle" onclick="toggleTheme()">Toggle dark mode</button>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="calendar.html" class="current">Calendar</a>
+      <a href="sprint-guidelines.html">Sprint Guidelines</a>
+      <a href="ops-project.html">Ops Project</a>
+    </nav>
   </header>
+  <hr class="header-rule">
+
+<div class="viz-root">
+
+  <h1>2026–27 Course Calendar</h1>
+  <p class="subtitle">
+    Board session dates are now real, pulled from the 2026-27 block schedule (G block). Day-to-day
+    week labels are still relative placeholders — see the footnote below before treating any non-board
+    week as a fixed date. The year opens with a 1–2 week Ops Infrastructure Kickoff, then four capstone
+    phases, five board sessions plus Demo Day, and a code-review cadence running roughly every 4 weeks
+    (two sprints) once building starts.
+  </p>
 
   <div class="legend">
+    <div class="legend-item"><span class="swatch" style="background:var(--phase-ops)"></span>Ops Kickoff — Rocket.Chat, Plane, Uptime Kuma</div>
     <div class="legend-item"><span class="swatch" style="background:var(--phase-1)"></span>Phase 1 — Ideation</div>
     <div class="legend-item"><span class="swatch" style="background:var(--phase-2)"></span>Phase 2 — Research, Prototypes, Personas, Requirements</div>
     <div class="legend-item"><span class="swatch" style="background:var(--phase-3)"></span>Phase 3 — Build (Sprints)</div>
     <div class="legend-item"><span class="swatch" style="background:var(--phase-4)"></span>Phase 4 — Production &amp; Delivery</div>
   </div>
   <div class="marker-key">
-    <div><span class="ic">⬤</span><b style="color:var(--text-primary)">Black circle</b> = Board session</div>
-    <div><span class="ic">⬤</span><b style="color:var(--status-good)">Green circle</b> = Code review checkpoint</div>
+    <div><span class="ic">⬤</span><b style="color:var(--ink)">Dark circle</b> = Board session</div>
+    <div><span class="ic">⬤</span><b style="color:var(--sage)">Green circle</b> = Code review checkpoint</div>
   </div>
 
   <!-- FALL TERM -->
   <div class="term-block">
-    <div class="term-title">Fall Term <span class="term-note">— Phase 1 → Phase 2 begins</span></div>
+    <div class="term-title">Fall Term <span class="term-note">— Ops Kickoff → Phase 1 → Phase 2</span></div>
     <div class="weekrow">
-      <div class="week" data-phase="1"><div class="badges"></div><div class="wk-num">WK 1</div><div class="wk-label">Course norms</div><div class="wk-sub">AI policy co-write</div></div>
-      <div class="week" data-phase="1"><div class="badges"></div><div class="wk-num">WK 2</div><div class="wk-label">Brainstorm</div><div class="wk-sub">5 whys, ideation</div></div>
-      <div class="week" data-phase="1"><div class="badges"></div><div class="wk-num">WK 3</div><div class="wk-label">Idea screening</div><div class="wk-sub">Teams form</div></div>
-      <div class="week" data-phase="1"><div class="badges"></div><div class="wk-num">WK 4</div><div class="wk-label">Pitch prep</div><div class="wk-sub">Exec summary</div></div>
-      <div class="week" data-phase="1" title="Board Meeting 1: Pitch — Fri, Oct 2, 2026 (G block) — grade exec summary, pitch, AI policy doc"><div class="badges"><span class="badge board">B1</span></div><div class="wk-num">WK 5</div><div class="wk-label">Board Mtg 1</div><div class="wk-sub">Fri, Oct 2 '26</div></div>
-      <div class="week" data-phase="1"><div class="badges"></div><div class="wk-num">WK 6</div><div class="wk-label">Research window</div><div class="wk-sub">Empathy interviews</div></div>
-      <div class="week" data-phase="2" title="Board Meeting 1B: Pitch Follow-up — Fri, Oct 16, 2026 (G block, exactly 2 weeks after Mtg 1) — board can now say 'no until you get X'"><div class="badges"><span class="badge board">B2</span></div><div class="wk-num">WK 7</div><div class="wk-label">Board Mtg 1B</div><div class="wk-sub">Fri, Oct 16 '26</div></div>
-      <div class="week" data-phase="2"><div class="badges"></div><div class="wk-num">WK 8</div><div class="wk-label">Personas</div><div class="wk-sub">JTBD interviews</div></div>
-      <div class="week" data-phase="2"><div class="badges"></div><div class="wk-num">WK 9</div><div class="wk-label">Prototypes</div><div class="wk-sub">User test round 1</div></div>
-      <div class="week" data-phase="2" title="Grade: architecture / deployment decision record (the SQL vs. NoSQL checkpoint)"><div class="badges"></div><div class="wk-num">WK 10</div><div class="wk-label">PRD draft</div><div class="wk-sub">Architecture ADR ✓</div></div>
-      <div class="week" data-phase="2" title="Grade: PRD, personas, metrics plan"><div class="badges"></div><div class="wk-num">WK 11</div><div class="wk-label">Metrics plan</div><div class="wk-sub">PRD finalized ✓</div></div>
-      <div class="week" data-phase="2" title="Board Meeting 2 — Tue, Dec 15, 2026 (G block, last class day before Winter Break) — present PRD, personas, prototype, validated hypothesis"><div class="badges"><span class="badge board">B3</span></div><div class="wk-num">WK 12</div><div class="wk-label">Board Mtg 2</div><div class="wk-sub">Tue, Dec 15 '26</div></div>
+      <div class="week week-wide" data-phase="ops" title="Ops Infrastructure Kickoff — teams stand up Rocket.Chat, Plane, and Uptime Kuma. Course norms and the AI-guidelines unit fold into these same days. Real length unknown until you see the pace in the room — see footnote."><div class="badges"></div><div class="wk-num">WK 1–2</div><div class="wk-label">Ops Kickoff</div><div class="wk-sub">Infra stood up, live &amp; monitored</div></div>
+      <div class="week" data-phase="1"><div class="badges"></div><div class="wk-num">WK 3</div><div class="wk-label">Brainstorm</div><div class="wk-sub">5 whys, ideation</div></div>
+      <div class="week" data-phase="1"><div class="badges"></div><div class="wk-num">WK 4</div><div class="wk-label">Idea screening</div><div class="wk-sub">Teams form</div></div>
+      <div class="week" data-phase="1"><div class="badges"></div><div class="wk-num">WK 5</div><div class="wk-label">Pitch prep</div><div class="wk-sub">Exec summary</div></div>
+      <div class="week" data-phase="1" title="Board Meeting 1: Pitch — Fri, Oct 2, 2026 (G block) — grade exec summary, pitch"><div class="badges"><span class="badge board">B1</span></div><div class="wk-num">WK 6</div><div class="wk-label">Board Mtg 1</div><div class="wk-sub">Fri, Oct 2 '26</div></div>
+      <div class="week" data-phase="1"><div class="badges"></div><div class="wk-num">WK 7</div><div class="wk-label">Research window</div><div class="wk-sub">Empathy interviews</div></div>
+      <div class="week" data-phase="2" title="Board Meeting 1B: Pitch Follow-up — Fri, Oct 16, 2026 (G block, exactly 2 weeks after Mtg 1) — board can now say 'no until you get X'"><div class="badges"><span class="badge board">B2</span></div><div class="wk-num">WK 8</div><div class="wk-label">Board Mtg 1B</div><div class="wk-sub">Fri, Oct 16 '26</div></div>
+      <div class="week" data-phase="2"><div class="badges"></div><div class="wk-num">WK 9</div><div class="wk-label">Personas</div><div class="wk-sub">JTBD interviews</div></div>
+      <div class="week" data-phase="2"><div class="badges"></div><div class="wk-num">WK 10</div><div class="wk-label">Prototypes</div><div class="wk-sub">User test round 1</div></div>
+      <div class="week" data-phase="2" title="Grade: architecture / deployment decision record (the SQL vs. NoSQL checkpoint)"><div class="badges"></div><div class="wk-num">WK 11</div><div class="wk-label">PRD draft</div><div class="wk-sub">Architecture ADR ✓</div></div>
+      <div class="week" data-phase="2" title="Grade: PRD, personas, metrics plan"><div class="badges"></div><div class="wk-num">WK 12</div><div class="wk-label">Metrics plan</div><div class="wk-sub">PRD finalized ✓</div></div>
+      <div class="week" data-phase="2" title="Board Meeting 2 — Tue, Dec 15, 2026 (G block, last class day before Winter Break) — present PRD, personas, prototype, validated hypothesis"><div class="badges"><span class="badge board">B3</span></div><div class="wk-num">WK 13</div><div class="wk-label">Board Mtg 2</div><div class="wk-sub">Tue, Dec 15 '26</div></div>
     </div>
   </div>
 
@@ -246,19 +249,19 @@
         <tr><th>Term</th><th>Wk</th><th>Phase</th><th>Focus</th><th>Board / Code Review</th><th>Graded this week</th></tr>
       </thead>
       <tbody>
-        <tr><td>Fall</td><td>1</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Course norms, AI policy co-write</td><td></td><td>—</td></tr>
-        <tr><td>Fall</td><td>2</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Brainstorming, 5 whys</td><td></td><td>—</td></tr>
-        <tr><td>Fall</td><td>3</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Idea screening, team formation</td><td></td><td>—</td></tr>
-        <tr><td>Fall</td><td>4</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Pitch prep, exec summary</td><td></td><td>Exec summary draft</td></tr>
-        <tr><td>Fall</td><td>5</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Pitch to board</td><td><b>Board Mtg 1</b> — Pitch</td><td>AI policy doc, pitch, exec summary</td></tr>
-        <tr><td>Fall</td><td>6</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Research homework window (empathy interviews, Mom Test)</td><td></td><td>—</td></tr>
-        <tr><td>Fall</td><td>7</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>Respond to board with research</td><td><b>Board Mtg 1B</b> — Pitch Follow-up</td><td>Research findings brief</td></tr>
-        <tr><td>Fall</td><td>8</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>Personas, JTBD</td><td></td><td>Personas</td></tr>
-        <tr><td>Fall</td><td>9</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>Prototypes, first user testing round</td><td></td><td>Prototype + test notes</td></tr>
-        <tr><td>Fall</td><td>10</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>PRD drafting</td><td></td><td>Architecture/deployment decision record (ADR)</td></tr>
-        <tr><td>Fall</td><td>11</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>Metrics plan, PRD finalized</td><td></td><td>PRD, metrics plan</td></tr>
-        <tr><td>Fall</td><td>12</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>Present to board</td><td><b>Board Mtg 2</b></td><td>Board presentation</td></tr>
-        <tr><td colspan="6" style="color:var(--text-muted); font-style:italic;">— Winter Break —</td></tr>
+        <tr><td>Fall</td><td>1–2</td><td class="phase-cell"><span class="dot" style="background:var(--phase-ops)"></span>Ops Kickoff</td><td>Ops Infrastructure Kickoff — teams stand up Rocket.Chat, Plane, and Uptime Kuma. Course norms and the AI-guidelines unit fold into these same days</td><td></td><td>Team assignments, AI-use tiers understood, all three services live and monitored (definition of done)</td></tr>
+        <tr><td>Fall</td><td>3</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Brainstorming, 5 whys</td><td></td><td>—</td></tr>
+        <tr><td>Fall</td><td>4</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Idea screening, team formation</td><td></td><td>—</td></tr>
+        <tr><td>Fall</td><td>5</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Pitch prep, exec summary</td><td></td><td>Exec summary draft</td></tr>
+        <tr><td>Fall</td><td>6</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Pitch to board</td><td><b>Board Mtg 1</b> — Pitch</td><td>Pitch, exec summary</td></tr>
+        <tr><td>Fall</td><td>7</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Research homework window (empathy interviews, Mom Test)</td><td></td><td>—</td></tr>
+        <tr><td>Fall</td><td>8</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>Respond to board with research</td><td><b>Board Mtg 1B</b> — Pitch Follow-up</td><td>Research findings brief</td></tr>
+        <tr><td>Fall</td><td>9</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>Personas, JTBD</td><td></td><td>Personas</td></tr>
+        <tr><td>Fall</td><td>10</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>Prototypes, first user testing round</td><td></td><td>Prototype + test notes</td></tr>
+        <tr><td>Fall</td><td>11</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>PRD drafting</td><td></td><td>Architecture/deployment decision record (ADR)</td></tr>
+        <tr><td>Fall</td><td>12</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>Metrics plan, PRD finalized</td><td></td><td>PRD, metrics plan</td></tr>
+        <tr><td>Fall</td><td>13</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>Present to board</td><td><b>Board Mtg 2</b></td><td>Board presentation</td></tr>
+        <tr><td colspan="6" style="color:var(--muted); font-style:italic;">— Winter Break —</td></tr>
         <tr><td>Winter</td><td>1</td><td class="phase-cell"><span class="dot" style="background:var(--phase-3)"></span>Build</td><td>Git lesson, requirements sign-off, Sprint 1 kickoff</td><td></td><td>Requirements sign-off</td></tr>
         <tr><td>Winter</td><td>2</td><td class="phase-cell"><span class="dot" style="background:var(--phase-3)"></span>Build</td><td>Sprint 1</td><td></td><td>—</td></tr>
         <tr><td>Winter</td><td>3</td><td class="phase-cell"><span class="dot" style="background:var(--phase-3)"></span>Build</td><td>Sprint 1 review, Sprint 2 planning</td><td></td><td>Sprint 1 retro</td></tr>
@@ -289,6 +292,13 @@
     June 2027" rather than a specific date, and will be pinned down once that's known.
   </p>
   <p class="footnote">
+    <b>WK 1–2 (Ops Kickoff) is a real range, not two exact weeks</b> — it's however long the ops project actually takes,
+    which won't be clear until you see the pace in the room. Board Mtg 1 (Oct 2) is fixed and won't move: if the kickoff
+    runs the full two weeks, WK 3–7 compress into whatever runway is left before Oct 2; if it wraps in one week, everything
+    shifts up by one and there's a bit more room. Worth a gut-check against the real G-block dates once school starts,
+    rather than assuming WK 1–7 fits exactly as drawn.
+  </p>
+  <p class="footnote">
     Everything else — the WK 1, WK 2, etc. day-to-day labels — are still relative placeholders, not real dates. The class
     actually meets roughly 2-3× per calendar week on the rotating G-block schedule (about 70+ sessions across the year),
     not once per week as this layout implies, so mapping every sprint/session to an exact date is a separate pass, not
@@ -299,12 +309,5 @@
   </p>
 
 </div>
-<script>
-  function toggleTheme() {
-    const root = document.querySelector('.viz-root');
-    const current = root.getAttribute('data-theme');
-    root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
-  }
-</script>
 </body>
 </html>
