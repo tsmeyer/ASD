@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASD 2026-27 Course Calendar</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --surface-page:    #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --border:         rgba(11,11,11,0.10);
+
+    --phase-1: #2a78d6; /* Ideation */
+    --phase-2: #eb6834; /* Research & Define */
+    --phase-3: #1baf7a; /* Build */
+    --phase-4: #eda100; /* Production & Delivery */
+
+    --status-good: #0ca30c;
+    --status-warn: #fab219;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --surface-1:      #1a1a19;
+      --surface-page:    #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --border:         rgba(255,255,255,0.10);
+
+      --phase-1: #3987e5;
+      --phase-2: #d95926;
+      --phase-3: #199e70;
+      --phase-4: #c98500;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --surface-1:      #1a1a19;
+    --surface-page:    #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --gridline:       #2c2c2a;
+    --border:         rgba(255,255,255,0.10);
+
+    --phase-1: #3987e5;
+    --phase-2: #d95926;
+    --phase-3: #199e70;
+    --phase-4: #c98500;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--surface-page);
+    color: var(--text-primary);
+  }
+  .viz-root { padding: 28px 32px 48px; max-width: 1180px; margin: 0 auto; }
+
+  header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 6px; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .subtitle { color: var(--text-secondary); font-size: 14px; margin: 0 0 18px; max-width: 720px; line-height: 1.5; }
+
+  .theme-toggle {
+    border: 1px solid var(--border);
+    background: var(--surface-1);
+    color: var(--text-secondary);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 18px; margin: 4px 0 26px; font-size: 12.5px; color: var(--text-secondary); }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+  .marker-key { display: flex; gap: 18px; margin-top: 4px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-secondary); }
+  .marker-key span.ic { margin-right: 4px; }
+
+  .term-block { margin-bottom: 30px; }
+  .term-title { font-size: 15px; font-weight: 600; margin: 0 0 8px; display: flex; align-items: baseline; gap: 8px; }
+  .term-title .term-note { font-size: 12px; font-weight: 400; color: var(--text-muted); }
+
+  .weekrow { display: flex; gap: 3px; }
+  .week {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    border-radius: 5px;
+    padding: 7px 6px 8px;
+    color: #fff;
+    font-size: 10.8px;
+    line-height: 1.25;
+    min-height: 74px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border: 2px solid var(--surface-page); /* 2px surface gap between adjacent fills */
+  }
+  .week .wk-num { font-size: 9.5px; opacity: 0.85; font-weight: 600; letter-spacing: 0.02em; }
+  .week .wk-label { margin-top: 3px; font-weight: 600; }
+  .week .wk-sub { margin-top: 2px; opacity: 0.92; font-weight: 400; }
+  .week[data-phase="1"] { background: var(--phase-1); color: #ffffff; }
+  .week[data-phase="2"] { background: var(--phase-2); color: #ffffff; }
+  .week[data-phase="3"] { background: var(--phase-3); color: #ffffff; }
+  .week[data-phase="4"] { background: var(--phase-4); color: #241a00; } /* yellow needs dark ink for contrast */
+
+  .badges { position: absolute; top: -9px; right: 3px; display: flex; gap: 3px; }
+  .badge {
+    width: 17px; height: 17px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
+    border: 2px solid var(--surface-page);
+    cursor: default;
+  }
+  .badge.board { background: var(--text-primary); color: var(--surface-1); }
+  .badge.review { background: var(--status-good); color: #fff; }
+
+  table.calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    margin-top: 6px;
+  }
+  table.calendar-table caption {
+    text-align: left; font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;
+  }
+  table.calendar-table th, table.calendar-table td {
+    text-align: left;
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--gridline);
+    vertical-align: top;
+  }
+  table.calendar-table th {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  table.calendar-table td.phase-cell { white-space: nowrap; font-weight: 600; }
+  .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; }
+
+  details { margin-top: 34px; }
+  summary { cursor: pointer; font-size: 13px; color: var(--text-secondary); font-weight: 600; padding: 6px 0; }
+
+  .footnote { font-size: 12px; color: var(--text-muted); margin-top: 22px; line-height: 1.6; }
+
+  @media (max-width: 720px) {
+    .weekrow { flex-wrap: wrap; }
+    .week { flex: 1 1 30%; }
+  }
+</style>
+</head>
+<body>
+<div class="viz-root" data-theme="">
+
+  <header>
+    <div>
+      <h1>Applied Software Development — 2026–27 Course Calendar</h1>
+      <p class="subtitle">
+        Board session dates are now real, pulled from the 2026-27 block schedule (G block). Day-to-day
+        week labels are still relative placeholders — see the footnote below before treating any non-board
+        week as a fixed date. Four phases, five board sessions plus Demo Day, and a code-review cadence
+        running roughly every 4 weeks (two sprints) once building starts.
+      </p>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle dark mode</button>
+  </header>
+
+  <div class="legend">
+    <div class="legend-item"><span class="swatch" style="background:var(--phase-1)"></span>Phase 1 — Ideation</div>
+    <div class="legend-item"><span class="swatch" style="background:var(--phase-2)"></span>Phase 2 — Research, Prototypes, Personas, Requirements</div>
+    <div class="legend-item"><span class="swatch" style="background:var(--phase-3)"></span>Phase 3 — Build (Sprints)</div>
+    <div class="legend-item"><span class="swatch" style="background:var(--phase-4)"></span>Phase 4 — Production &amp; Delivery</div>
+  </div>
+  <div class="marker-key">
+    <div><span class="ic">⬤</span><b style="color:var(--text-primary)">Black circle</b> = Board session</div>
+    <div><span class="ic">⬤</span><b style="color:var(--status-good)">Green circle</b> = Code review checkpoint</div>
+  </div>
+
+  <!-- FALL TERM -->
+  <div class="term-block">
+    <div class="term-title">Fall Term <span class="term-note">— Phase 1 → Phase 2 begins</span></div>
+    <div class="weekrow">
+      <div class="week" data-phase="1"><div class="badges"></div><div class="wk-num">WK 1</div><div class="wk-label">Course norms</div><div class="wk-sub">AI policy co-write</div></div>
+      <div class="week" data-phase="1"><div class="badges"></div><div class="wk-num">WK 2</div><div class="wk-label">Brainstorm</div><div class="wk-sub">5 whys, ideation</div></div>
+      <div class="week" data-phase="1"><div class="badges"></div><div class="wk-num">WK 3</div><div class="wk-label">Idea screening</div><div class="wk-sub">Teams form</div></div>
+      <div class="week" data-phase="1"><div class="badges"></div><div class="wk-num">WK 4</div><div class="wk-label">Pitch prep</div><div class="wk-sub">Exec summary</div></div>
+      <div class="week" data-phase="1" title="Board Meeting 1: Pitch — Fri, Oct 2, 2026 (G block) — grade exec summary, pitch, AI policy doc"><div class="badges"><span class="badge board">B1</span></div><div class="wk-num">WK 5</div><div class="wk-label">Board Mtg 1</div><div class="wk-sub">Fri, Oct 2 '26</div></div>
+      <div class="week" data-phase="1"><div class="badges"></div><div class="wk-num">WK 6</div><div class="wk-label">Research window</div><div class="wk-sub">Empathy interviews</div></div>
+      <div class="week" data-phase="2" title="Board Meeting 1B: Pitch Follow-up — Fri, Oct 16, 2026 (G block, exactly 2 weeks after Mtg 1) — board can now say 'no until you get X'"><div class="badges"><span class="badge board">B2</span></div><div class="wk-num">WK 7</div><div class="wk-label">Board Mtg 1B</div><div class="wk-sub">Fri, Oct 16 '26</div></div>
+      <div class="week" data-phase="2"><div class="badges"></div><div class="wk-num">WK 8</div><div class="wk-label">Personas</div><div class="wk-sub">JTBD interviews</div></div>
+      <div class="week" data-phase="2"><div class="badges"></div><div class="wk-num">WK 9</div><div class="wk-label">Prototypes</div><div class="wk-sub">User test round 1</div></div>
+      <div class="week" data-phase="2" title="Grade: architecture / deployment decision record (the SQL vs. NoSQL checkpoint)"><div class="badges"></div><div class="wk-num">WK 10</div><div class="wk-label">PRD draft</div><div class="wk-sub">Architecture ADR ✓</div></div>
+      <div class="week" data-phase="2" title="Grade: PRD, personas, metrics plan"><div class="badges"></div><div class="wk-num">WK 11</div><div class="wk-label">Metrics plan</div><div class="wk-sub">PRD finalized ✓</div></div>
+      <div class="week" data-phase="2" title="Board Meeting 2 — Tue, Dec 15, 2026 (G block, last class day before Winter Break) — present PRD, personas, prototype, validated hypothesis"><div class="badges"><span class="badge board">B3</span></div><div class="wk-num">WK 12</div><div class="wk-label">Board Mtg 2</div><div class="wk-sub">Tue, Dec 15 '26</div></div>
+    </div>
+  </div>
+
+  <!-- WINTER TERM -->
+  <div class="term-block">
+    <div class="term-title">Winter Term <span class="term-note">— Phase 3: Build (after Winter Break)</span></div>
+    <div class="weekrow">
+      <div class="week" data-phase="3" title="Grade: requirements sign-off"><div class="badges"></div><div class="wk-num">WK 1</div><div class="wk-label">Git lesson</div><div class="wk-sub">Sprint 1 kickoff</div></div>
+      <div class="week" data-phase="3"><div class="badges"></div><div class="wk-num">WK 2</div><div class="wk-label">Sprint 1</div><div class="wk-sub">Build</div></div>
+      <div class="week" data-phase="3"><div class="badges"></div><div class="wk-num">WK 3</div><div class="wk-label">Sprint 1 review</div><div class="wk-sub">Sprint 2 planned</div></div>
+      <div class="week" data-phase="3" title="Code Review #1 — grade repo/PR hygiene, commit discipline"><div class="badges"><span class="badge review">CR</span></div><div class="wk-num">WK 4</div><div class="wk-label">Sprint 2</div><div class="wk-sub">Code Review #1</div></div>
+      <div class="week" data-phase="3"><div class="badges"></div><div class="wk-num">WK 5</div><div class="wk-label">Winter Exam</div><div class="wk-sub">week</div></div>
+      <div class="week" data-phase="3"><div class="badges"></div><div class="wk-num">WK 6</div><div class="wk-label">Sprint 3</div><div class="wk-sub">Build</div></div>
+      <div class="week" data-phase="3"><div class="badges"></div><div class="wk-num">WK 7</div><div class="wk-label">Sprint 3 review</div><div class="wk-sub">Sprint 4 planned</div></div>
+      <div class="week" data-phase="3" title="Code Review #2 + Board Meeting 3 — Fri, Feb 19, 2027 (G block) — technical execution, deployment progress"><div class="badges"><span class="badge review">CR</span><span class="badge board">B4</span></div><div class="wk-num">WK 8</div><div class="wk-label">Sprint 4</div><div class="wk-sub">Fri, Feb 19 '27</div></div>
+    </div>
+  </div>
+
+  <!-- SPRING TERM -->
+  <div class="term-block">
+    <div class="term-title">Spring Term <span class="term-note">— Phase 3 tail → Phase 4: Production &amp; Delivery</span></div>
+    <div class="weekrow">
+      <div class="week" data-phase="3"><div class="badges"></div><div class="wk-num">WK 1</div><div class="wk-label">Sprint 5</div><div class="wk-sub">Build</div></div>
+      <div class="week" data-phase="3"><div class="badges"></div><div class="wk-num">WK 2</div><div class="wk-label">Sprint 5 review</div><div class="wk-sub">Sprint 6 planned</div></div>
+      <div class="week" data-phase="3" title="Code Review #3"><div class="badges"><span class="badge review">CR</span></div><div class="wk-num">WK 3</div><div class="wk-label">Sprint 6</div><div class="wk-sub">Code Review #3</div></div>
+      <div class="week" data-phase="4" title="Grade: deployment plan, go-to-market plan"><div class="badges"></div><div class="wk-num">WK 4</div><div class="wk-label">Deploy plan</div><div class="wk-sub">Go-to-market ✓</div></div>
+      <div class="week" data-phase="4" title="Grade: bug-bash/triage log, user onboarding test with a real outside user"><div class="badges"></div><div class="wk-num">WK 5</div><div class="wk-label">Sprint 7</div><div class="wk-sub">Bug bash + onboarding test</div></div>
+      <div class="week" data-phase="4" title="Code Review #4"><div class="badges"><span class="badge review">CR</span></div><div class="wk-num">WK 6</div><div class="wk-label">Sprint 7 review</div><div class="wk-sub">Sprint 8 planned</div></div>
+      <div class="week" data-phase="4" title="Grade: README/docs audit, security &amp; secrets checklist"><div class="badges"></div><div class="wk-num">WK 7</div><div class="wk-label">Sprint 8</div><div class="wk-sub">Docs + security audit</div></div>
+      <div class="week" data-phase="4" title="Code Review #5 + Grade: legacy/handoff doc"><div class="badges"><span class="badge review">CR</span></div><div class="wk-num">WK 8</div><div class="wk-label">Final review</div><div class="wk-sub">Handoff doc ✓</div></div>
+      <div class="week" data-phase="4"><div class="badges"></div><div class="wk-num">WK 9</div><div class="wk-label">Demo prep</div><div class="wk-sub">Final ADRs</div></div>
+      <div class="week" data-phase="4" title="Board Meeting 4 = Demo Day — TBD, late May or first week of June 2027 — depends on the exam schedule, which won't be set until late winter/spring — final, celebratory + reflective"><div class="badges"><span class="badge board">B5</span></div><div class="wk-num">WK 10</div><div class="wk-label">Demo Day</div><div class="wk-sub">Late May / early Jun '27</div></div>
+    </div>
+  </div>
+
+  <details open>
+    <summary>Full table view (every week, phase, and what's graded)</summary>
+    <table class="calendar-table">
+      <caption>Reference table — same data as the timeline above, for screen readers, editing, and printing.</caption>
+      <thead>
+        <tr><th>Term</th><th>Wk</th><th>Phase</th><th>Focus</th><th>Board / Code Review</th><th>Graded this week</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Fall</td><td>1</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Course norms, AI policy co-write</td><td></td><td>—</td></tr>
+        <tr><td>Fall</td><td>2</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Brainstorming, 5 whys</td><td></td><td>—</td></tr>
+        <tr><td>Fall</td><td>3</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Idea screening, team formation</td><td></td><td>—</td></tr>
+        <tr><td>Fall</td><td>4</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Pitch prep, exec summary</td><td></td><td>Exec summary draft</td></tr>
+        <tr><td>Fall</td><td>5</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Pitch to board</td><td><b>Board Mtg 1</b> — Pitch</td><td>AI policy doc, pitch, exec summary</td></tr>
+        <tr><td>Fall</td><td>6</td><td class="phase-cell"><span class="dot" style="background:var(--phase-1)"></span>Ideation</td><td>Research homework window (empathy interviews, Mom Test)</td><td></td><td>—</td></tr>
+        <tr><td>Fall</td><td>7</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>Respond to board with research</td><td><b>Board Mtg 1B</b> — Pitch Follow-up</td><td>Research findings brief</td></tr>
+        <tr><td>Fall</td><td>8</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>Personas, JTBD</td><td></td><td>Personas</td></tr>
+        <tr><td>Fall</td><td>9</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>Prototypes, first user testing round</td><td></td><td>Prototype + test notes</td></tr>
+        <tr><td>Fall</td><td>10</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>PRD drafting</td><td></td><td>Architecture/deployment decision record (ADR)</td></tr>
+        <tr><td>Fall</td><td>11</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>Metrics plan, PRD finalized</td><td></td><td>PRD, metrics plan</td></tr>
+        <tr><td>Fall</td><td>12</td><td class="phase-cell"><span class="dot" style="background:var(--phase-2)"></span>Research &amp; Define</td><td>Present to board</td><td><b>Board Mtg 2</b></td><td>Board presentation</td></tr>
+        <tr><td colspan="6" style="color:var(--text-muted); font-style:italic;">— Winter Break —</td></tr>
+        <tr><td>Winter</td><td>1</td><td class="phase-cell"><span class="dot" style="background:var(--phase-3)"></span>Build</td><td>Git lesson, requirements sign-off, Sprint 1 kickoff</td><td></td><td>Requirements sign-off</td></tr>
+        <tr><td>Winter</td><td>2</td><td class="phase-cell"><span class="dot" style="background:var(--phase-3)"></span>Build</td><td>Sprint 1</td><td></td><td>—</td></tr>
+        <tr><td>Winter</td><td>3</td><td class="phase-cell"><span class="dot" style="background:var(--phase-3)"></span>Build</td><td>Sprint 1 review, Sprint 2 planning</td><td></td><td>Sprint 1 retro</td></tr>
+        <tr><td>Winter</td><td>4</td><td class="phase-cell"><span class="dot" style="background:var(--phase-3)"></span>Build</td><td>Sprint 2</td><td><b>Code Review #1</b></td><td>Repo/PR hygiene, commit discipline</td></tr>
+        <tr><td>Winter</td><td>5</td><td class="phase-cell"><span class="dot" style="background:var(--phase-3)"></span>Build</td><td>Winter Term Exam week</td><td></td><td>—</td></tr>
+        <tr><td>Winter</td><td>6</td><td class="phase-cell"><span class="dot" style="background:var(--phase-3)"></span>Build</td><td>Sprint 3</td><td></td><td>—</td></tr>
+        <tr><td>Winter</td><td>7</td><td class="phase-cell"><span class="dot" style="background:var(--phase-3)"></span>Build</td><td>Sprint 3 review, Sprint 4 planning</td><td></td><td>Sprint 3 retro</td></tr>
+        <tr><td>Winter</td><td>8</td><td class="phase-cell"><span class="dot" style="background:var(--phase-3)"></span>Build</td><td>Sprint 4</td><td><b>Code Review #2</b> + <b>Board Mtg 3</b></td><td>Code review, technical execution presented to board</td></tr>
+        <tr><td>Spring</td><td>1</td><td class="phase-cell"><span class="dot" style="background:var(--phase-3)"></span>Build</td><td>Sprint 5</td><td></td><td>—</td></tr>
+        <tr><td>Spring</td><td>2</td><td class="phase-cell"><span class="dot" style="background:var(--phase-3)"></span>Build</td><td>Sprint 5 review, Sprint 6 planning</td><td></td><td>Sprint 5 retro</td></tr>
+        <tr><td>Spring</td><td>3</td><td class="phase-cell"><span class="dot" style="background:var(--phase-3)"></span>Build</td><td>Sprint 6</td><td><b>Code Review #3</b></td><td>Code review</td></tr>
+        <tr><td>Spring</td><td>4</td><td class="phase-cell"><span class="dot" style="background:var(--phase-4)"></span>Production &amp; Delivery</td><td>Transition to production</td><td></td><td>Deployment plan, go-to-market plan</td></tr>
+        <tr><td>Spring</td><td>5</td><td class="phase-cell"><span class="dot" style="background:var(--phase-4)"></span>Production &amp; Delivery</td><td>Sprint 7 — bug bash, real-user onboarding test</td><td></td><td>Bug-bash/triage log, onboarding test results</td></tr>
+        <tr><td>Spring</td><td>6</td><td class="phase-cell"><span class="dot" style="background:var(--phase-4)"></span>Production &amp; Delivery</td><td>Sprint 7 review, Sprint 8 planning</td><td><b>Code Review #4</b></td><td>Code review</td></tr>
+        <tr><td>Spring</td><td>7</td><td class="phase-cell"><span class="dot" style="background:var(--phase-4)"></span>Production &amp; Delivery</td><td>Sprint 8 — docs &amp; security pass</td><td></td><td>README/docs audit, security &amp; secrets checklist</td></tr>
+        <tr><td>Spring</td><td>8</td><td class="phase-cell"><span class="dot" style="background:var(--phase-4)"></span>Production &amp; Delivery</td><td>Final code review, handoff prep</td><td><b>Code Review #5</b></td><td>Legacy/handoff doc</td></tr>
+        <tr><td>Spring</td><td>9</td><td class="phase-cell"><span class="dot" style="background:var(--phase-4)"></span>Production &amp; Delivery</td><td>Demo prep, final ADRs</td><td></td><td>Final ADRs</td></tr>
+        <tr><td>Spring</td><td>10</td><td class="phase-cell"><span class="dot" style="background:var(--phase-4)"></span>Production &amp; Delivery</td><td>Final presentation</td><td><b>Board Mtg 4 / Demo Day</b></td><td>Final presentation, year-long Habits of Mind synthesis</td></tr>
+      </tbody>
+    </table>
+  </details>
+
+  <p class="footnote">
+    <b>Board dates — real, pulled from the 2026-27 block schedule (G block):</b> Board Mtg 1 (Pitch) Fri Oct 2 '26 ·
+    Board Mtg 1B (Pitch Follow-up) Fri Oct 16 '26 (exactly 2 weeks later) · Board Mtg 2 Tue Dec 15 '26 (last G-block day
+    before Winter Break) · Board Mtg 3 Fri Feb 19 '27 · Board Mtg 4 / Demo Day <b>parked, on purpose</b> — the exam
+    schedule won't take shape until late winter/spring, so this one is being held as "late May or the first week of
+    June 2027" rather than a specific date, and will be pinned down once that's known.
+  </p>
+  <p class="footnote">
+    Everything else — the WK 1, WK 2, etc. day-to-day labels — are still relative placeholders, not real dates. The class
+    actually meets roughly 2-3× per calendar week on the rotating G-block schedule (about 70+ sessions across the year),
+    not once per week as this layout implies, so mapping every sprint/session to an exact date is a separate pass, not
+    yet done here. Code-review cadence assumes roughly every 4 weeks (two sprints) starting once building begins in
+    Winter Term, per your note. Phase 4 grading was deliberately padded with five distinct artifacts (deployment plan,
+    go-to-market plan, bug-bash log, onboarding test, docs/security audit, handoff doc) since that's the stretch you
+    flagged as short on gradable work last year.
+  </p>
+
+</div>
+<script>
+  function toggleTheme() {
+    const root = document.querySelector('.viz-root');
+    const current = root.getAttribute('data-theme');
+    root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+  }
+</script>
+</body>
+</html>
