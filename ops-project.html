@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ops Infrastructure Project — ASD 2026-27</title>
+<title>Ops Infrastructure Kickoff — ASD 2026-27</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
@@ -58,6 +58,7 @@
 
   h2 { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin: 44px 0 16px; padding-top: 12px; border-top: 1px solid var(--border); }
   h2:first-of-type { border-top: none; padding-top: 0; }
+  h3 { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600; margin: 26px 0 10px; }
   p, li { font-family: var(--font-serif); font-size: 0.98rem; color: var(--ink); }
   p { margin: 0 0 14px; }
   ul, ol { padding-left: 22px; margin: 0 0 16px; }
@@ -67,11 +68,21 @@
   th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
   th { color: var(--muted); font-family: var(--font-mono); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
   code { font-family: var(--font-mono); background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-size: 0.85em; color: var(--terracotta-dark); }
+  pre { font-family: var(--font-mono); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; font-size: 0.82rem; overflow-x: auto; color: var(--ink-soft); margin: 0 0 20px; }
 
   .callout {
     background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--plum);
     border-radius: 8px; padding: 14px 18px; margin: 0 0 20px; font-family: var(--font-mono); font-size: 0.85rem; color: var(--ink-soft);
   }
+  .step {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 20px; margin: 0 0 14px;
+  }
+  .step b {
+    display: block; margin-bottom: 6px; font-family: var(--font-mono); font-size: 0.8rem;
+    text-transform: uppercase; letter-spacing: 0.04em; color: var(--sage);
+  }
+  .step p { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
   .tier {
     background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
     padding: 16px 20px; margin: 0 0 14px;
@@ -102,59 +113,65 @@
   <hr class="header-rule">
 
   <div class="wrap">
-    <h1>Your Team Runs Real Infrastructure</h1>
-    <p class="sub">The first real work of the year — Wk 1–2 of the Fall Term.</p>
-    <p class="lede">Before we start pitching and building your own projects, three teams are going to stand up and run three pieces of real, open-source software that the whole class will actually use — not a simulation of production software, the real thing.</p>
-
-    <h2>The three systems</h2>
-    <table>
-      <tr><th>Team</th><th>Owns</th><th>What it does</th></tr>
-      <tr><td><b>A</b></td><td>Rocket.Chat</td><td>Our class's actual chat platform, for the whole year</td></tr>
-      <tr><td><b>B</b></td><td>Plane</td><td>Where the ops teams (not your capstone teams) track the work of keeping these three systems alive</td></tr>
-      <tr><td><b>C</b></td><td>Uptime Kuma</td><td>A public status page showing, in real time, whether Rocket.Chat and the tracker are actually up</td></tr>
-    </table>
-    <p>All three run on one always-on Mac Mini on the school network. This isn't a cloud project — everything here is reachable over the school Wi-Fi, nothing needs a Google Cloud account.</p>
+    <h1>Ops Infrastructure Kickoff</h1>
+    <p class="sub">2-3 classes, whole class, first thing this year.</p>
+    <p class="lede">Before we pitch or build anything of our own, the whole class is going to deploy a real, open-source chat app — Rocket.Chat — twice: once on your own laptop, then once for real, together, on a machine that stays on. This isn't a simulation of production software. It's the real thing, just small enough to fit in a few classes.</p>
 
     <h2>Why this comes first</h2>
-    <p>Every other assignment this year is eventually forgiving — if your own project breaks in the spring, that's material for a retrospective. If the class chat server breaks, people can't talk to each other <i>today</i>. That's not a metaphor. It's the most honest way we know to teach you what "production" actually means before you scope your own idea.</p>
+    <p>You've written a lot of Java over the last two years, but almost none of it involved actually running software somewhere other people can use it. This course isn't about devops, but devops is inevitably part of the world your own project will live in by the end of the year. The point here is calibration: real, hands-on exposure to what deploying software involves — servers, databases, containers — before you scope your own idea, so you don't underestimate that part of the work later.</p>
 
-    <h2>What "your job" actually means</h2>
-    <p>Your team doesn't just get this running once — you own it for the year. That includes:</p>
-    <ul>
-      <li>Getting it deployed and working in the first place.</li>
-      <li>Keeping it running: if it goes down, you're the ones who fix it, not Mr. Meyer.</li>
-      <li>The Mac Mini has FileVault disk encryption on, on purpose. If it reboots, someone needs to be physically present with the disk password to unlock it before anything comes back — that's a real, intended constraint, not an oversight. Your team should know how to handle it.</li>
-      <li>You'll have SSH access to the machine to check on and restart your service remotely — Mr. Meyer will set this up with you directly.</li>
-      <li>When something breaks, you write a short incident report: what broke, why, what you did about it. Same structure as a sprint retro — Observation, Root cause, Experiment.</li>
-    </ul>
+    <h2>How it goes</h2>
+    <div class="step">
+      <b>Class 1 — deploy it yourself</b>
+      <p>Every student installs Rocket.Chat on their own laptop, using its official setup. All of us at once — no waiting in line. You'll hit small, real problems. Afterward, we talk through what you just built as a class.</p>
+    </div>
+    <div class="step">
+      <b>Homework — draw it</b>
+      <p>Based on what you just deployed: an architecture diagram (browser → frontend → backend → database), plus one or two Mermaid sequence diagrams for named scenarios — a login flow, and one message sent and received. Same diagramming skill you'll reuse for your own project's architecture decisions later this year.</p>
+    </div>
+    <div class="step">
+      <b>Class 2 (often bleeding into Class 3) — deploy it for real, together</b>
+      <p>The class sets up the same app on a shared Mac Mini that stays on and reachable, rather than living on one laptop. Two students peel off to add Uptime Kuma, a lightweight monitor, once the main service is live. While that pair works, everyone else gets a quick 1:1 conversation about their diagram.</p>
+    </div>
 
-    <h2>Team B's tool: Plane</h2>
-    <p>Mr. Meyer picked Plane directly, mainly because it has solid built-in support for Google sign-in, which matters for onboarding the whole class without another password to manage. Your job is to actually stand it up and get it working — including Google SSO, once the underlying network piece that makes SSO possible is sorted out.</p>
+    <p class="callout">Expect this to take 3 classes, not 2 — and treat that as a feature, not a slip. Nothing about a first deployment goes right the first time; that's real, and it's worth naming out loud when it happens. It's a preview of exactly the kind of thing that eats time at the end of your own project if you don't plan for it.</p>
 
-    <h2>The actual finish line</h2>
-    <p>This project isn't done when your team's service technically runs — it's done when all three systems are up <i>and</i> everyone can see that they're up, in one place, on Team C's status page. That last step takes all three teams working together, on purpose:</p>
-    <ul>
-      <li><b>Team A and Team C:</b> Team C needs Rocket.Chat's address to add it as a monitor — point it at <code>http://&lt;the-mac's-address&gt;:3000/api/info</code>, a real endpoint people use for exactly this.</li>
-      <li><b>Team B and Team C:</b> same idea for Plane — point the monitor at its login page, or better, go look together at whatever health check is already defined in Plane's own docker-compose file (worth doing anyway — it's basically your reflection question about walking through that file, just done early).</li>
-      <li><b>Team C:</b> set up a real notification (email is simplest) so someone actually gets pinged when a service goes down, instead of relying on someone happening to glance at the status page.</li>
-    </ul>
-    <p class="callout">None of you are individually "done" until all three show green together. That's the actual point — not three teams each quietly confident their own thing works, but one system the whole class can trust.</p>
+    <h2>Example diagrams</h2>
+    <p>Architecture diagram:</p>
+    <pre>graph LR
+    U[User's Browser] -->|https://url| F[Frontend&lt;br/&gt;Rocket.Chat Web App]
+    F -->|API calls| B[Backend&lt;br/&gt;Rocket.Chat Server]
+    B -->|reads/writes| D[(Database&lt;br/&gt;MongoDB)]</pre>
+    <p>Sequence diagram — one message sent and received:</p>
+    <pre>sequenceDiagram
+    participant A as User A
+    participant F as Frontend
+    participant B as Backend
+    participant D as Database
+    participant C as User B
+
+    A->>F: Type and send message
+    F->>B: Send message to server
+    B->>D: Save message
+    D-->>B: Confirm saved
+    B-->>C: Push new message
+    C-->>C: Message appears on screen</pre>
+
+    <h2>SSH access to the shared machine</h2>
+    <p>Once we get to the collaborative deploy, you'll need SSH access to the Mac Mini. See the separate SSH setup guide for exact steps — you generate a key pair on your own laptop, send Mr. Meyer your public key, and he adds it to the shared machine so you can connect directly.</p>
 
     <h2>What you're actually here to learn</h2>
-    <p>This project is testing something different from your capstone project, on purpose:</p>
     <ol>
       <li><b>Reading and operating a real codebase you didn't write.</b> A real install guide, real configuration, a real database dependency — and being able to say specifically how that's different from two years of CS and Data Structures &amp; Algorithms.</li>
-      <li><b>Owning reliability, not just getting something to work once.</b> "It runs" and "it stays running" are different jobs.</li>
-      <li><b>Evaluating and choosing real tools under real constraints</b> (Team B especially).</li>
-      <li><b>Configuring, not just coding.</b> Auth, environment variables, containers, backups — the invisible mass of a real deployment that never shows up when an assignment just needs to "run on localhost."</li>
-      <li><b>Communicating clearly when it actually matters.</b> Your classmates are the real, affected audience for your incident reports — not just a grade.</li>
+      <li><b>The vocabulary connects to something you actually did.</b> Server, client, frontend, backend, API, database — by the end, these aren't new words, they're names for things you already ran into.</li>
+      <li><b>Deployment friction is real and worth planning for.</b> Whatever goes wrong here is a preview of what can go wrong at the end of your own capstone project.</li>
     </ol>
 
     <h2>AI use on this project</h2>
-    <p>This project's AI policy is deliberately different from how you'll use AI on your own capstone build, because the risk here is different. On your own project, the worry is "AI wrote code you don't understand." Here, you're barely writing original code — you're deploying and configuring someone else's real software — so the actual trap is subtler: asking AI to explain an error and pasting in the fix without understanding <i>why</i> it worked.</p>
+    <p>Different shape than your capstone AI policy, because the risk here is different. On your own project, the worry is "AI wrote code you don't understand." Here, you're barely writing original code — you're deploying and configuring someone else's — so the real trap is subtler: asking AI to explain an error and pasting in the fix without understanding <i>why</i> it worked.</p>
     <div class="tier">
       <b>Use AI freely, out in the open, for</b>
-      <p>Explaining unfamiliar code or config, translating a cryptic error message, summarizing documentation, drafting first-pass notes for Team B's comparison. This is how working engineers actually use these tools — no reason to pretend otherwise.</p>
+      <p>Explaining unfamiliar error messages, summarizing documentation, translating a cryptic config option. This is how working engineers actually use these tools — no reason to pretend otherwise.</p>
     </div>
     <div class="tier">
       <b>Use AI to help, but explain what you shipped</b>
@@ -162,11 +179,8 @@
     </div>
     <div class="tier">
       <b>No AI, by design</b>
-      <p>Your incident writeups need to be in your own words. These exist specifically to check whether you actually understand what happened, and an AI-smoothed writeup defeats the point. Expect a short "walk me through it" conversation on at least one incident per team, per term.</p>
+      <p>The 1:1 conversation about your diagram is closed-book — no notes, no AI. That's the one moment this project is actually trying to check: can you explain what you built, in your own words.</p>
     </div>
-
-    <h2>Reflection</h2>
-    <p>Once all three systems are live, the whole class does a short in-class writing assignment on what this project taught you. Mr. Meyer will walk you through it when the time comes — nothing to prepare in advance.</p>
   </div>
 </body>
 </html>
